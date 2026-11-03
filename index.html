@@ -163,7 +163,7 @@
         </div>
     </header>
 
-    <!-- HERO SECTION (Cleaned up) -->
+    <!-- HERO SECTION (Cleaned up extra card) -->
     <section class="relative overflow-hidden py-16 lg:py-24 border-b border-gold-600/20 text-center">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-600/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
@@ -181,9 +181,8 @@
             </p>
 
             <div class="flex flex-wrap justify-center gap-4 pt-4">
-                <button onclick="scrollToSection('products')" class="bg-gradient-to-r from-gold-500 to-gold-700 hover:from-gold-600 hover:to-gold-800 text-emerald-950 font-bold px-8 py-3.5 rounded-full shadow-lg shadow-gold-600/20 transition transform hover:-translate-y-0.5 flex items-center space-x-2 space-x-reverse text-sm">
-                    <span>ہماری کلیکشن دیکھیں</span>
-                    <i class="fa-solid fa-arrow-left"></i>
+                <button onclick="scrollToSection('products')" class="bg-gradient-to-r from-gold-500 to-gold-700 hover:from-gold-600 hover:to-gold-800 text-emerald-950 font-bold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 text-sm">
+                    ہماری کلیکشن دیکھیں
                 </button>
                 <a href="https://wa.me/923028372072?text=السلام%20علیکم!%20میں%20قرآن%20پاک%20کی%20خریداری%20کے%20سلسلے%20میں%20رابطہ%20کرنا%20چاہتا%20ہوں۔" target="_blank" class="bg-emerald-900/80 hover:bg-emerald-800 border border-gold-500/40 text-gold-300 font-semibold px-6 py-3.5 rounded-full transition flex items-center space-x-2 space-x-reverse text-sm">
                     <i class="fa-brands fa-whatsapp text-lg text-green-400"></i>
@@ -277,9 +276,7 @@
 
                 <div>
                     <h4 class="text-sm font-bold text-white border-b border-gold-500/20 pb-2 mb-4 font-amiri">طریقہ ہائے ادائیگی</h4>
-                    <div id="footerAccountsList" class="space-y-2 text-xs">
-                        <!-- Dynamic accounts -->
-                    </div>
+                    <div id="footerAccountsList" class="space-y-2 text-xs"></div>
                 </div>
             </div>
 
@@ -635,4 +632,88 @@
         function closeAdminPinModal() { document.getElementById('adminPinModal').classList.add('hidden'); }
         function verifyAdminPin(e) {
             e.preventDefault();
-            if (document.getElementById('adminPinInput').value === '7866') { closeAdminPinModal(); document.getElementById
+            if (document.getElementById('adminPinInput').value === '7866') { closeAdminPinModal(); document.getElementById('adminPanelModal').classList.remove('hidden'); renderAdminProducts(); renderAdminAccounts(); }
+            else alert('غلط پن کوڈ (PIN: 7866)');
+        }
+        function closeAdminPanel() { document.getElementById('adminPanelModal').classList.add('hidden'); }
+        function switchAdminTab(t) {
+            if (t === 'products') { document.getElementById('adminProductsTab').classList.remove('hidden'); document.getElementById('adminAccountsTab').classList.add('hidden'); }
+            else { document.getElementById('adminAccountsTab').classList.remove('hidden'); document.getElementById('adminProductsTab').classList.add('hidden'); }
+        }
+
+        function renderAdminProducts() {
+            document.getElementById('adminProductsList').innerHTML = (window.productsData || []).map(p => `
+                <div class="bg-emerald-900/60 p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <div><strong class="text-white">${p.title}</strong> - <span class="text-gold-400">Rs. ${p.price}</span></div>
+                    <div class="space-x-1 space-x-reverse">
+                        <button onclick="openProductForm(${JSON.stringify(p).replace(/"/g, '&quot;')})" class="bg-gold-600/20 text-gold-400 px-3 py-1 rounded">ایڈٹ</button>
+                        <button onclick="dbDeleteProduct('${p.id}')" class="bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductForm(p = null) {
+            document.getElementById('productFormModal').classList.remove('hidden');
+            if (p) {
+                document.getElementById('editProductId').value = p.id;
+                document.getElementById('pTitle').value = p.title;
+                document.getElementById('pCategory').value = p.category;
+                document.getElementById('pPrice').value = p.price;
+                document.getElementById('pImage').value = p.image;
+                document.getElementById('pDesc').value = p.desc || '';
+            } else {
+                document.getElementById('editProductId').value = '';
+                document.getElementById('pTitle').value = '';
+                document.getElementById('pCategory').value = 'tajweedi';
+                document.getElementById('pPrice').value = '';
+                document.getElementById('pImage').value = '';
+                document.getElementById('pDesc').value = '';
+            }
+        }
+        function closeProductForm() { document.getElementById('productFormModal').classList.add('hidden'); }
+        async function saveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('editProductId').value || null;
+            const data = {
+                title: document.getElementById('pTitle').value,
+                category: document.getElementById('pCategory').value,
+                price: parseFloat(document.getElementById('pPrice').value),
+                image: document.getElementById('pImage').value,
+                desc: document.getElementById('pDesc').value
+            };
+            closeProductForm();
+            await window.dbSaveProduct(data, id);
+        }
+
+        function renderAdminAccounts() {
+            document.getElementById('adminAccountsList').innerHTML = (window.accountsData || []).map(acc => `
+                <div class="bg-emerald-900/60 p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <div><strong class="text-gold-400">${acc.title}</strong> (${acc.bank}) - <span dir="ltr">${acc.number}</span></div>
+                    <button onclick="dbDeleteAccount('${acc.id}')" class="bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
+                </div>
+            `).join('');
+        }
+        function openAccountForm() { document.getElementById('accountFormModal').classList.remove('hidden'); }
+        function closeAccountForm() { document.getElementById('accountFormModal').classList.add('hidden'); }
+        async function saveAccount(e) {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('accTitle').value,
+                bank: document.getElementById('accBank').value,
+                number: document.getElementById('accNumber').value
+            };
+            closeAccountForm();
+            await window.dbSaveAccount(data);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+    </script>
+</body>
+</html>
