@@ -127,7 +127,7 @@
 
                 <!-- RIGHT ACTION BUTTONS -->
                 <div class="flex items-center space-x-3 space-x-reverse">
-                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20مجھے%20قرآن%20پاک%20اور%20اسلامی%20کتب%20کے%20بارے%20میں%20معلومات%20چاہییں۔" 
+                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20मुझे%20قرآن%20پاک%20اور%20اسلامی%20کتب%20के%20بارے%20میں%20معلومات%20چاہییں۔" 
                        target="_blank" 
                        class="hidden sm:flex items-center space-x-2 space-x-reverse bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 px-3.5 py-2 rounded-full text-xs font-semibold transition transform hover:scale-105 shadow-md">
                         <i class="fa-brands fa-whatsapp text-green-400 text-base"></i>
@@ -139,7 +139,7 @@
                         <span id="cartCount" class="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-emerald-950">0</span>
                     </button>
 
-                    <!-- Secret Admin Access Icon (PIN: 7866) -->
+                    <!-- Secret Admin Access Icon -->
                     <button onclick="openAdminPinModal()" title="ایڈمن پینل (Admin)" class="bg-emerald-900/80 hover:bg-gold-600 hover:text-emerald-950 text-gold-400 border border-gold-500/40 p-2.5 rounded-full transition">
                         <i class="fa-solid fa-user-shield text-lg"></i>
                     </button>
@@ -285,7 +285,7 @@
                 <div class="flex items-center space-x-4 space-x-reverse mt-2 sm:mt-0">
                     <button onclick="openAdminPinModal()" class="text-gold-400/80 hover:text-gold-400 transition text-xs flex items-center space-x-1 space-x-reverse">
                         <i class="fa-solid fa-lock"></i>
-                        <span>ایڈمن پینل (PIN: 7866)</span>
+                        <span>ایڈمن پینل</span>
                     </button>
                 </div>
             </div>
@@ -346,12 +346,12 @@
         </div>
     </div>
 
-    <!-- SECRET ADMIN PIN MODAL (PIN: 7866) -->
+    <!-- SECRET ADMIN PIN MODAL -->
     <div id="adminPinModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeAdminPinModal()"></div>
         <div class="relative bg-emerald-950 border border-gold-500/40 rounded-3xl max-w-sm w-full p-6 shadow-2xl z-10 text-center">
             <h3 class="text-lg font-bold font-amiri text-white mb-1">ایڈمن پینل لاگ ان</h3>
-            <p class="text-xs text-slate-400 mb-4">پن کوڈ درج کریں (PIN: 7866)</p>
+            <p class="text-xs text-slate-400 mb-4">پن کوڈ درج کریں</p>
             <form onsubmit="verifyAdminPin(event)" class="space-y-4">
                 <input type="password" id="adminPinInput" maxlength="4" placeholder="••••" required class="w-32 mx-auto text-center tracking-widest text-2xl font-bold bg-emerald-900 border border-gold-500/40 text-gold-400 rounded-xl py-2 focus:outline-none">
                 <div class="flex justify-center space-x-2 space-x-reverse">
@@ -635,7 +635,7 @@
         }
 
         function toggleCartDrawer() { document.getElementById('cartDrawer').classList.toggle('hidden'); }
-        function quickOrderWhatsApp(t, p) { window.open(`https://wa.me/923029517440?text=السلام%20علیکم!%20مجھے%20${encodeURIComponent(t)}%20(Rs.%20${p})%20خریدنا%20ہے۔`, '_blank'); }
+        function quickOrderWhatsApp(t, p) { window.open(`https://wa.me/923029517440?text=السلام%20علیکم!%20मुझे%20${encodeURIComponent(t)}%20(Rs.%20${p})%20خریدنا%20ہے۔`, '_blank'); }
         function checkoutViaWhatsApp() {
             if (window.cart.length === 0) { alert('ٹوکری خالی ہے'); return; }
             let list = window.cart.map((i, idx) => `${idx + 1}. ${i.title} x ${i.qty}`).join('%0A');
@@ -657,7 +657,7 @@
         function verifyAdminPin(e) {
             e.preventDefault();
             if (document.getElementById('adminPinInput').value === '7866') { closeAdminPinModal(); document.getElementById('adminPanelModal').classList.remove('hidden'); renderAdminProducts(); renderAdminAccounts(); }
-            else alert('غلط پن کوڈ (PIN: 7866)');
+            else alert('غلط پن کوڈ');
         }
         function closeAdminPanel() { document.getElementById('adminPanelModal').classList.add('hidden'); }
         function switchAdminTab(t) {
@@ -723,7 +723,7 @@
         async function saveAccount(e) {
             e.preventDefault();
             const data = {
-                title: document.getElementById('accTitle5') || document.getElementById('accTitle').value,
+                title: document.getElementById('accTitle').value,
                 bank: document.getElementById('accBank').value,
                 number: document.getElementById('accNumber').value
             };
