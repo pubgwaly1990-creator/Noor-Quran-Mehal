@@ -44,7 +44,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Custom Decorative CSS -->
+    <!-- Custom Decorative CSS & Effects -->
     <style>
         .islamic-bg-pattern {
             background-color: #03281e;
@@ -76,25 +76,105 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
+
+        /* Interactive Mouse Glow Circle Effect */
+        #cursorGlow {
+            pointer-events: none;
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(252,211,77,0.4) 0%, rgba(212,175,55,0.15) 50%, transparent 80%);
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+            z-index: 9999;
+        }
+
+        /* Ripple Effect on Tab & Button Click */
+        .ripple-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(252, 211, 77, 0.6);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Cinematic Intro Screen */
+        #introScreen {
+            transition: opacity 1.2s ease-in-out, visibility 1.2s ease-in-out, transform 1.2s ease-in-out;
+        }
+        .rush-bg {
+            background: linear-gradient(rgba(2, 32, 23, 0.85), rgba(1, 20, 14, 0.95)), url('https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&q=80&w=1600');
+            background-size: cover;
+            background-position: center;
+        }
+        @keyframes rushAnimation {
+            0% { transform: scale(0.98); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.95; }
+        }
+        .animate-rush {
+            animation: rushAnimation 3s ease-in-out infinite alternate;
+        }
     </style>
 </head>
 <body class="bg-emerald-950 text-slate-100 font-sans custom-scrollbar min-h-screen flex flex-col selection:bg-gold-600 selection:text-white">
+
+    <!-- Mouse Click Glow Circle Element -->
+    <div id="cursorGlow"></div>
+
+    <!-- CINEMATIC INTRO SCREEN (10 SECONDS RUSH / WELCOME) -->
+    <div id="introScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center rush-bg text-center p-4">
+        <div class="absolute inset-0 bg-emerald-950/70 backdrop-blur-md pointer-events-none"></div>
+        <div class="relative z-10 space-y-6 max-w-xl mx-auto animate-rush px-4">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gold-400 via-gold-600 to-emerald-900 p-1 shadow-2xl shadow-gold-500/40">
+                <div class="w-full h-full bg-emerald-950 rounded-full flex items-center justify-center border border-gold-500/50">
+                    <i class="fa-solid fa-book-quran text-3xl text-gold-400"></i>
+                </div>
+            </div>
+            <div>
+                <span class="bg-gold-600/20 text-gold-300 text-xs px-3 py-1 rounded-full border border-gold-500/30 uppercase tracking-widest font-semibold inline-block mb-3">خصوصی خوش آمدید</span>
+                <h1 class="text-3xl sm:text-5xl font-bold font-amiri gold-gradient-text">نور قرآن محل</h1>
+                <p class="text-slate-200 text-sm sm:text-base mt-2 font-quran">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — قرآن مجید اور اسلامی کتب کا مرکز</p>
+                <div class="mt-4 text-gold-400 font-mono text-xs tracking-wider">
+                    ویب سائٹ خودکار کھل رہی ہے <span id="countdownTimer" class="font-bold text-base text-white">10</span> سیکنڈ میں...
+                </div>
+            </div>
+            <div class="pt-2">
+                <button onclick="openWebsite()" class="ripple-btn group relative inline-flex items-center space-x-3 space-x-reverse bg-gradient-to-r from-gold-500 via-gold-600 to-gold-700 hover:from-gold-600 hover:to-gold-800 text-emerald-950 font-bold px-8 py-4 rounded-full shadow-2xl transition transform hover:scale-105 text-base">
+                    <i class="fa-solid fa-book-open text-lg"></i>
+                    <span>ابھی وزٹ کریں (Enter Store)</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- TOP ANNOUNCEMENT BAR -->
     <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-900 border-b border-gold-600/30 text-xs py-2 px-4 text-center flex justify-between items-center text-amber-200">
         <div class="hidden sm:flex items-center space-x-4 space-x-reverse">
             <span><i class="fa-solid fa-truck-fast text-gold-500 ml-1"></i> پورے پاکستان میں ہوم ڈیلیوری دستیاب ہے</span>
-            <a href="tel:+923029517440" class="hover:text-gold-400 font-sans" dir="ltr"><i class="fa-solid fa-phone text-gold-500 ml-1"></i> +92 302 9517440</a>
+            <a href="tel:+923029517440" class="ripple-btn hover:text-gold-400 font-sans" dir="ltr"><i class="fa-solid fa-phone text-gold-500 ml-1"></i> +92 302 9517440</a>
         </div>
         <div class="w-full sm:w-auto text-center font-quran text-sm text-gold-400 font-semibold tracking-wide">
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — نور قرآن محل میں خوش آمدید
         </div>
         <div class="hidden md:flex items-center space-x-3 space-x-reverse font-sans">
-            <a href="https://instagram.com" target="_blank" title="Instagram" class="hover:text-gold-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
-            <a href="https://tiktok.com" target="_blank" title="TikTok" class="hover:text-gold-400 transition"><i class="fa-brands fa-tiktok text-sm"></i></a>
-            <a href="https://facebook.com" target="_blank" title="Facebook" class="hover:text-gold-400 transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+            <a href="https://instagram.com" target="_blank" title="Instagram" class="ripple-btn hover:text-gold-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+            <a href="https://tiktok.com" target="_blank" title="TikTok" class="ripple-btn hover:text-gold-400 transition"><i class="fa-brands fa-tiktok text-sm"></i></a>
+            <a href="https://facebook.com" target="_blank" title="Facebook" class="ripple-btn hover:text-gold-400 transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
             <span class="bg-gold-600/20 px-2 py-0.5 rounded text-gold-300 border border-gold-500/30">PKR (₨)</span>
-            <span class="hover:text-white cursor-pointer transition" onclick="scrollToSection('contact')"><i class="fa-solid fa-location-dot ml-1 text-gold-400"></i> پشاور، پاکستان</span>
+            <span class="ripple-btn hover:text-white cursor-pointer transition" onclick="scrollToSection('contact')"><i class="fa-solid fa-location-dot ml-1 text-gold-400"></i> پشاور، پاکستان</span>
         </div>
     </div>
 
@@ -104,7 +184,7 @@
             <div class="flex items-center justify-between h-20">
                 
                 <!-- BRAND LOGO -->
-                <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="ripple-btn flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold-400 via-gold-600 to-emerald-900 p-0.5 shadow-lg shadow-gold-600/20">
                         <div class="w-full h-full bg-emerald-950 rounded-full flex items-center justify-center border border-gold-500/40">
                             <i class="fa-solid fa-book-quran text-2xl text-gold-400"></i>
@@ -127,24 +207,24 @@
 
                 <!-- RIGHT ACTION BUTTONS -->
                 <div class="flex items-center space-x-3 space-x-reverse">
-                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20मुझे%20قرآن%20پاک%20اور%20اسلامی%20کتب%20के%20بارے%20میں%20معلومات%20چاہییں۔" 
+                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20मुझे%20قرآن%20پاک%20اور%20اسلامی%20کتب%20के%20بارے%20में%20معلومات%20چاہییں۔" 
                        target="_blank" 
-                       class="hidden sm:flex items-center space-x-2 space-x-reverse bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 px-3.5 py-2 rounded-full text-xs font-semibold transition transform hover:scale-105 shadow-md">
+                       class="ripple-btn hidden sm:flex items-center space-x-2 space-x-reverse bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 px-3.5 py-2 rounded-full text-xs font-semibold transition transform hover:scale-105 shadow-md">
                         <i class="fa-brands fa-whatsapp text-green-400 text-base"></i>
                         <span>واٹس ایپ آرڈر</span>
                     </a>
 
-                    <button onclick="toggleCartDrawer()" class="relative bg-emerald-900/80 hover:bg-emerald-800 border border-gold-500/40 text-gold-400 p-2.5 rounded-full transition">
+                    <button onclick="toggleCartDrawer()" class="ripple-btn relative bg-emerald-900/80 hover:bg-emerald-800 border border-gold-500/40 text-gold-400 p-2.5 rounded-full transition">
                         <i class="fa-solid fa-cart-shopping text-lg"></i>
                         <span id="cartCount" class="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-emerald-950">0</span>
                     </button>
 
                     <!-- Secret Admin Access Icon -->
-                    <button onclick="openAdminPinModal()" title="ایڈمن پینل (Admin)" class="bg-emerald-900/80 hover:bg-gold-600 hover:text-emerald-950 text-gold-400 border border-gold-500/40 p-2.5 rounded-full transition">
+                    <button onclick="openAdminPinModal()" title="ایڈمن پینل (Admin)" class="ripple-btn bg-emerald-900/80 hover:bg-gold-600 hover:text-emerald-950 text-gold-400 border border-gold-500/40 p-2.5 rounded-full transition">
                         <i class="fa-solid fa-user-shield text-lg"></i>
                     </button>
 
-                    <button onclick="toggleMobileSearch()" class="md:hidden text-gold-400 p-2 text-xl focus:outline-none">
+                    <button onclick="toggleMobileSearch()" class="ripple-btn md:hidden text-gold-400 p-2 text-xl focus:outline-none">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
@@ -181,10 +261,10 @@
             </p>
 
             <div class="flex flex-wrap justify-center gap-4 pt-4">
-                <button onclick="scrollToSection('products')" class="bg-gradient-to-r from-gold-500 to-gold-700 hover:from-gold-600 hover:to-gold-800 text-emerald-950 font-bold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 text-sm">
+                <button onclick="scrollToSection('products')" class="ripple-btn bg-gradient-to-r from-gold-500 to-gold-700 hover:from-gold-600 hover:to-gold-800 text-emerald-950 font-bold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 text-sm">
                     ہماری کلیکشن دیکھیں
                 </button>
-                <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20میں%20قرآن%20پاک%20کی%20خریداری%20کے%20سلسلے%20میں%20رابطہ%20کرنا%20چاہتا%20ہوں۔" target="_blank" class="bg-emerald-900/80 hover:bg-emerald-800 border border-gold-500/40 text-gold-300 font-semibold px-6 py-3.5 rounded-full transition flex items-center space-x-2 space-x-reverse text-sm">
+                <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20میں%20قرآن%20پاک%20کی%20خریداری%20کے%20سلسلے%20میں%20رابطہ%20کرنا%20چاہتا%20ہوں۔" target="_blank" class="ripple-btn bg-emerald-900/80 hover:bg-emerald-800 border border-gold-500/40 text-gold-300 font-semibold px-6 py-3.5 rounded-full transition flex items-center space-x-2 space-x-reverse text-sm">
                     <i class="fa-brands fa-whatsapp text-lg text-green-400"></i>
                     <span>براہ راست واٹس ایپ آرڈر</span>
                 </a>
@@ -203,22 +283,22 @@
 
         <!-- CATEGORY TABS -->
         <div class="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-10">
-            <button onclick="filterCategory('all')" class="cat-btn active bg-gold-600 text-emerald-950 font-bold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-500 transition shadow-md">
+            <button onclick="filterCategory('all')" class="ripple-btn cat-btn active bg-gold-600 text-emerald-950 font-bold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-500 transition shadow-md">
                 تمام اشیاء (All)
             </button>
-            <button onclick="filterCategory('tajweedi')" class="cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
+            <button onclick="filterCategory('tajweedi')" class="ripple-btn cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
                 تجویدی قرآن (Tajweedi)
             </button>
-            <button onclick="filterCategory('translation')" class="cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
+            <button onclick="filterCategory('translation')" class="ripple-btn cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
                 ترجمہ و تفسیر (Tafseer)
             </button>
-            <button onclick="filterCategory('rehal')" class="cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
+            <button onclick="filterCategory('rehal')" class="ripple-btn cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
                 رحل اور ڈبے (Rehal & Boxes)
             </button>
-            <button onclick="filterCategory('books')" class="cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
+            <button onclick="filterCategory('books')" class="ripple-btn cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
                 اسلامی کتب (Islamic Books)
             </button>
-            <button onclick="filterCategory('digital')" class="cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
+            <button onclick="filterCategory('digital')" class="ripple-btn cat-btn bg-emerald-900/80 hover:bg-emerald-800 text-slate-200 font-semibold px-5 py-2.5 rounded-full text-xs sm:text-sm border border-gold-600/30 transition">
                 ڈیجیٹل قرآن (Digital Quran)
             </button>
         </div>
@@ -254,9 +334,9 @@
                 <div>
                     <h4 class="text-sm font-bold text-white border-b border-gold-500/20 pb-2 mb-4 font-amiri">اہم لنکس</h4>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="#products" onclick="filterCategory('tajweedi')" class="hover:text-gold-400 transition">تجویدی قرآن کریم</a></li>
-                        <li><a href="#products" onclick="filterCategory('translation')" class="hover:text-gold-400 transition">تراجم و تفاسیر</a></li>
-                        <li><a href="#products" onclick="filterCategory('rehal')" class="hover:text-gold-400 transition">مخملی ڈبے و لکڑی کی رحل</a></li>
+                        <li><a href="#products" onclick="filterCategory('tajweedi')" class="ripple-btn hover:text-gold-400 transition">تجویدی قرآن کریم</a></li>
+                        <li><a href="#products" onclick="filterCategory('translation')" class="ripple-btn hover:text-gold-400 transition">تراجم و تفاسیر</a></li>
+                        <li><a href="#products" onclick="filterCategory('rehal')" class="ripple-btn hover:text-gold-400 transition">مخملی ڈبے و لکڑی کی رحل</a></li>
                     </ul>
                 </div>
 
@@ -269,7 +349,7 @@
                         </li>
                         <li class="flex items-center space-x-2 space-x-reverse">
                             <i class="fa-solid fa-phone text-gold-400"></i>
-                            <a href="tel:+923029517440" dir="ltr" class="hover:text-gold-400 transition">+92 302 9517440</a>
+                            <a href="tel:+923029517440" dir="ltr" class="ripple-btn hover:text-gold-400 transition">+92 302 9517440</a>
                         </li>
                     </ul>
                 </div>
@@ -283,7 +363,7 @@
             <div class="border-t border-emerald-900 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
                 <p>© 2026 نور قرآن محل (Noor Quran Mehal). جملہ حقوق محفوظ ہیں۔</p>
                 <div class="flex items-center space-x-4 space-x-reverse mt-2 sm:mt-0">
-                    <button onclick="openAdminPinModal()" class="text-gold-400/80 hover:text-gold-400 transition text-xs flex items-center space-x-1 space-x-reverse">
+                    <button onclick="openAdminPinModal()" class="ripple-btn text-gold-400/80 hover:text-gold-400 transition text-xs flex items-center space-x-1 space-x-reverse">
                         <i class="fa-solid fa-lock"></i>
                         <span>ایڈمن پینل</span>
                     </button>
@@ -302,7 +382,7 @@
                         <i class="fa-solid fa-basket-shopping text-gold-400"></i>
                         <h2 class="text-base font-bold text-white font-amiri">آپ کی خریداری کی ٹوکری</h2>
                     </div>
-                    <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    <button onclick="toggleCartDrawer()" class="ripple-btn text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
                 <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"></div>
                 <div class="p-4 bg-emerald-900/90 border-t border-gold-600/30 space-y-3">
@@ -311,8 +391,8 @@
                         <span id="cartSubtotal" class="text-lg font-bold text-gold-400">Rs. 0</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2 pt-2">
-                        <button onclick="openCheckoutModal()" class="bg-gradient-to-r from-gold-500 to-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl text-xs shadow">چیک آؤٹ کریں</button>
-                        <button onclick="checkoutViaWhatsApp()" class="bg-emerald-800 border border-emerald-600 text-emerald-100 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 space-x-reverse"><i class="fa-brands fa-whatsapp text-green-400"></i><span>واٹس ایپ آرڈر</span></button>
+                        <button onclick="openCheckoutModal()" class="ripple-btn bg-gradient-to-r from-gold-500 to-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl text-xs shadow">چیک آؤٹ کریں</button>
+                        <button onclick="checkoutViaWhatsApp()" class="ripple-btn bg-emerald-800 border border-emerald-600 text-emerald-100 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 space-x-reverse"><i class="fa-brands fa-whatsapp text-green-400"></i><span>واٹس ایپ آرڈر</span></button>
                     </div>
                 </div>
             </div>
@@ -325,7 +405,7 @@
         <div class="relative bg-emerald-950 border border-gold-500/40 rounded-3xl max-w-lg w-full p-6 overflow-y-auto max-h-[90vh] shadow-2xl z-10 text-right">
             <div class="flex items-center justify-between border-b border-gold-500/20 pb-3 mb-4">
                 <h3 class="text-xl font-bold font-amiri text-gold-400">مکمل آرڈر ڈیٹیل</h3>
-                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeCheckoutModal()" class="ripple-btn text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div id="checkoutAccountDisplay" class="mb-4 bg-emerald-900/60 p-3 rounded-2xl border border-gold-500/30 text-xs space-y-1"></div>
             <form id="orderForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-xs">
@@ -341,7 +421,7 @@
                     <label class="block text-slate-300 mb-1">مکمل پتہ اور شہر *</label>
                     <textarea id="custAddress" required rows="2" placeholder="پشاور..." class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-gold-500 to-gold-600 text-emerald-950 font-bold py-3 rounded-xl shadow text-sm">آرڈر کنفرم کریں</button>
+                <button type="submit" class="ripple-btn w-full bg-gradient-to-r from-gold-500 to-gold-600 text-emerald-950 font-bold py-3 rounded-xl shadow text-sm">آرڈر کنفرم کریں</button>
             </form>
         </div>
     </div>
@@ -355,8 +435,8 @@
             <form onsubmit="verifyAdminPin(event)" class="space-y-4">
                 <input type="password" id="adminPinInput" maxlength="4" placeholder="••••" required class="w-32 mx-auto text-center tracking-widest text-2xl font-bold bg-emerald-900 border border-gold-500/40 text-gold-400 rounded-xl py-2 focus:outline-none">
                 <div class="flex justify-center space-x-2 space-x-reverse">
-                    <button type="submit" class="bg-gold-600 text-emerald-950 font-bold px-6 py-2 rounded-xl text-xs">لاگ ان کریں</button>
-                    <button type="button" onclick="closeAdminPinModal()" class="bg-emerald-900 text-slate-300 px-4 py-2 rounded-xl text-xs">منسوخ</button>
+                    <button type="submit" class="ripple-btn bg-gold-600 text-emerald-950 font-bold px-6 py-2 rounded-xl text-xs">لاگ ان کریں</button>
+                    <button type="button" onclick="closeAdminPinModal()" class="ripple-btn bg-emerald-900 text-slate-300 px-4 py-2 rounded-xl text-xs">منسوخ</button>
                 </div>
             </form>
         </div>
@@ -368,24 +448,24 @@
         <div class="relative bg-emerald-950 border border-gold-500/50 rounded-3xl max-w-4xl w-full h-[90vh] flex flex-col shadow-2xl z-10 text-right overflow-hidden">
             <div class="p-4 bg-emerald-900 border-b border-gold-500/30 flex items-center justify-between">
                 <h2 class="text-lg font-bold text-white font-amiri">نور قرآن محل - ایڈمن کنٹرول پینل</h2>
-                <button onclick="closeAdminPanel()" class="text-slate-400 hover:text-white bg-emerald-950 p-1.5 rounded-full"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeAdminPanel()" class="ripple-btn text-slate-400 hover:text-white bg-emerald-950 p-1.5 rounded-full"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="flex border-b border-gold-500/20 bg-emerald-900/50 text-xs font-bold">
-                <button id="adminTabProdBtn" onclick="switchAdminTab('products')" class="flex-1 py-3 border-b-2 border-gold-500 text-gold-400 font-amiri text-sm">پروڈکٹس مینیجر</button>
-                <button id="adminTabAccBtn" onclick="switchAdminTab('accounts')" class="flex-1 py-3 border-b-2 border-transparent text-slate-400 font-amiri text-sm">بینک اکاؤنٹس</button>
+                <button id="adminTabProdBtn" onclick="switchAdminTab('products')" class="ripple-btn flex-1 py-3 border-b-2 border-gold-500 text-gold-400 font-amiri text-sm">پروڈکٹس مینیجر</button>
+                <button id="adminTabAccBtn" onclick="switchAdminTab('accounts')" class="ripple-btn flex-1 py-3 border-b-2 border-transparent text-slate-400 font-amiri text-sm">بینک اکاؤنٹس</button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
                 <div id="adminProductsTab" class="space-y-6">
                     <div class="flex items-center justify-between">
                         <h3 class="text-base font-bold text-gold-400 font-amiri">تمام پروڈکٹس</h3>
-                        <button onclick="openProductForm()" class="bg-gold-600 text-emerald-950 font-bold px-4 py-2 rounded-xl text-xs shadow flex items-center space-x-1 space-x-reverse"><i class="fa-solid fa-plus"></i><span>نئی پروڈکٹ شامل کریں</span></button>
+                        <button onclick="openProductForm()" class="ripple-btn bg-gold-600 text-emerald-950 font-bold px-4 py-2 rounded-xl text-xs shadow flex items-center space-x-1 space-x-reverse"><i class="fa-solid fa-plus"></i><span>نئی پروڈکٹ شامل کریں</span></button>
                     </div>
                     <div id="adminProductsList" class="space-y-3"></div>
                 </div>
                 <div id="adminAccountsTab" class="space-y-6 hidden">
                     <div class="flex items-center justify-between">
                         <h3 class="text-base font-bold text-gold-400 font-amiri">بینک اکاؤنٹس</h3>
-                        <button onclick="openAccountForm()" class="bg-gold-600 text-emerald-950 font-bold px-4 py-2 rounded-xl text-xs shadow"><i class="fa-solid fa-plus"></i> نیا اکاؤنٹ</button>
+                        <button onclick="openAccountForm()" class="ripple-btn bg-gold-600 text-emerald-950 font-bold px-4 py-2 rounded-xl text-xs shadow"><i class="fa-solid fa-plus"></i> نیا اکاؤنٹ</button>
                     </div>
                     <div id="adminAccountsList" class="space-y-3"></div>
                 </div>
@@ -413,7 +493,7 @@
                 <div><label class="block text-slate-300 mb-1">قیمت (PKR) *</label><input type="number" id="pPrice" required class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white"></div>
                 <div><label class="block text-slate-300 mb-1">تصویر کا لنک (Image URL) *</label><input type="url" id="pImage" required class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white" dir="ltr"></div>
                 <div><label class="block text-slate-300 mb-1">تفصیل</label><textarea id="pDesc" rows="3" class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white"></textarea></div>
-                <button type="submit" class="w-full bg-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl">محفوظ کریں</button>
+                <button type="submit" class="ripple-btn w-full bg-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl">محفوظ کریں</button>
             </form>
         </div>
     </div>
@@ -428,7 +508,7 @@
                 <div><label class="block text-slate-300 mb-1">عنوان *</label><input type="text" id="accTitle" required class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white"></div>
                 <div><label class="block text-slate-300 mb-1">بینک / والٹ *</label><input type="text" id="accBank" required class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white"></div>
                 <div><label class="block text-slate-300 mb-1">نمبر *</label><input type="text" id="accNumber" required class="w-full bg-emerald-900 border border-gold-600/30 rounded-xl p-2.5 text-white" dir="ltr"></div>
-                <button type="submit" class="w-full bg-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl">محفوظ کریں</button>
+                <button type="submit" class="ripple-btn w-full bg-gold-600 text-emerald-950 font-bold py-2.5 rounded-xl">محفوظ کریں</button>
             </form>
         </div>
     </div>
@@ -524,8 +604,62 @@
         initFirebase();
     </script>
 
-    <!-- INTERACTIVE UI LOGIC -->
+    <!-- INTERACTIVE UI & EFFECTS LOGIC -->
     <script>
+        // Mouse Move Glow Circle Tracker
+        const cursorGlow = document.getElementById('cursorGlow');
+        window.addEventListener('mousemove', (e) => {
+            if (cursorGlow) {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Tab & Button Click Ripple Effect Handler
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('.ripple-btn');
+            if (target) {
+                const circle = document.createElement('span');
+                const diameter = Math.max(target.clientWidth, target.clientHeight);
+                const radius = diameter / 2;
+                
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - target.getBoundingClientRect().left - radius}px`;
+                circle.style.top = `${e.clientY - target.getBoundingClientRect().top - radius}px`;
+                circle.classList.add('ripple');
+                
+                const existingRipple = target.getElementsByClassName('ripple')[0];
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+                
+                target.appendChild(circle);
+            }
+        });
+
+        // 10-Second Countdown & Auto-Open Animation
+        let timeLeft = 10;
+        const countdownElement = document.getElementById('countdownTimer');
+        
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (countdownElement) countdownElement.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                openWebsite();
+            }
+        }, 1000);
+
+        function openWebsite() {
+            clearInterval(countdownInterval);
+            const intro = document.getElementById('introScreen');
+            if (intro) {
+                intro.style.opacity = '0';
+                intro.style.transform = 'scale(1.08)';
+                intro.style.visibility = 'hidden';
+            }
+        }
+
         function renderFooterAccounts() {
             const container = document.getElementById('footerAccountsList');
             const checkoutAcc = document.getElementById('checkoutAccountDisplay');
@@ -553,8 +687,8 @@
                         <div class="mt-4 pt-3 border-t border-gold-500/10 flex items-center justify-between">
                             <span class="text-lg font-bold text-gold-400">Rs. ${Number(product.price).toLocaleString()}</span>
                             <div class="space-x-1 space-x-reverse">
-                                <button onclick="addToCart('${product.id}')" class="bg-emerald-800 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-xl">ٹوکری</button>
-                                <button onclick="quickOrderWhatsApp('${product.title}', ${product.price})" class="bg-gold-600 hover:bg-gold-500 text-emerald-950 text-xs font-bold px-3 py-2 rounded-xl"><i class="fa-brands fa-whatsapp"></i></button>
+                                <button onclick="addToCart('${product.id}')" class="ripple-btn bg-emerald-800 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-xl">ٹوکری</button>
+                                <button onclick="quickOrderWhatsApp('${product.title}', ${product.price})" class="ripple-btn bg-gold-600 hover:bg-gold-500 text-emerald-950 text-xs font-bold px-3 py-2 rounded-xl"><i class="fa-brands fa-whatsapp"></i></button>
                             </div>
                         </div>
                     </div>
@@ -565,7 +699,7 @@
         function filterCategory(cat) {
             window.currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active', 'bg-gold-600', 'text-emerald-950'));
-            if (event && event.target) event.target.classList.add('active', 'bg-gold-600', 'text-emerald-950');
+            if (event && event.target) event.target.closest('.cat-btn').classList.add('active', 'bg-gold-600', 'text-emerald-950');
             applyCategoryFilter(cat);
         }
 
@@ -670,8 +804,8 @@
                 <div class="bg-emerald-900/60 p-3 rounded-2xl flex items-center justify-between text-xs">
                     <div><strong class="text-white">${p.title}</strong> - <span class="text-gold-400">Rs. ${p.price}</span></div>
                     <div class="space-x-1 space-x-reverse">
-                        <button onclick="openProductForm(${JSON.stringify(p).replace(/"/g, '&quot;')})" class="bg-gold-600/20 text-gold-400 px-3 py-1 rounded">ایڈٹ</button>
-                        <button onclick="dbDeleteProduct('${p.id}')" class="bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
+                        <button onclick="openProductForm(${JSON.stringify(p).replace(/"/g, '&quot;')})" class="ripple-btn bg-gold-600/20 text-gold-400 px-3 py-1 rounded">ایڈٹ</button>
+                        <button onclick="dbDeleteProduct('${p.id}')" class="ripple-btn bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
                     </div>
                 </div>
             `).join('');
@@ -687,12 +821,12 @@
                 document.getElementById('pImage').value = p.image;
                 document.getElementById('pDesc').value = p.desc || '';
             } else {
-                document.getElementById('editProductId').value = '',
-                document.getElementById('pTitle').value = '',
-                document.getElementById('pCategory').value = 'tajweedi',
-                document.getElementById('pPrice').value = '',
-                document.getElementById('pImage').value = '',
-                document.getElementById('pDesc').value = ''
+                document.getElementById('editProductId').value = '';
+                document.getElementById('pTitle').value = '';
+                document.getElementById('pCategory').value = 'tajweedi';
+                document.getElementById('pPrice').value = '';
+                document.getElementById('pImage').value = '';
+                document.getElementById('pDesc').value = '';
             }
         }
         function closeProductForm() { document.getElementById('productFormModal').classList.add('hidden'); }
@@ -714,7 +848,7 @@
             document.getElementById('adminAccountsList').innerHTML = (window.accountsData || []).map(acc => `
                 <div class="bg-emerald-900/60 p-3 rounded-2xl flex items-center justify-between text-xs">
                     <div><strong class="text-gold-400">${acc.title}</strong> (${acc.bank}) - <span dir="ltr">${acc.number}</span></div>
-                    <button onclick="dbDeleteAccount('${acc.id}')" class="bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
+                    <button onclick="dbDeleteAccount('${acc.id}')" class="ripple-btn bg-red-900/50 text-red-400 px-3 py-1 rounded">ڈلیٹ</button>
                 </div>
             `).join('');
         }
