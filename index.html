@@ -118,7 +118,7 @@
 
                 <!-- SEARCH BAR (DESKTOP) -->
                 <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
-                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="قرآن کریم، ترجمہ، تفسیر یا کتب تلاش کریں..." 
+                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="قرآن کریم، ترجمہ، تفسیر یا کتب تلاش کریں..." 
                            class="w-full bg-emerald-900/60 border border-gold-600/40 rounded-full py-2.5 px-5 pr-11 text-sm text-amber-100 placeholder-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-gold-500/50 transition">
                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gold-400">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -127,7 +127,7 @@
 
                 <!-- RIGHT ACTION BUTTONS -->
                 <div class="flex items-center space-x-3 space-x-reverse">
-                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20मुझे%20قرآن%20پاک%20اور%20اسلامی%20کتب%20کے%20بارے%20میں%20معلومات%20چاہییں۔" 
+                    <a href="https://wa.me/923029517440?text=السلام%20علیکم!%20مجھے%20قرآن%20پاک%20اور%20اسلامی%20کتب%20کے%20بارے%20میں%20معلومات%20چاہییں۔" 
                        target="_blank" 
                        class="hidden sm:flex items-center space-x-2 space-x-reverse bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 px-3.5 py-2 rounded-full text-xs font-semibold transition transform hover:scale-105 shadow-md">
                         <i class="fa-brands fa-whatsapp text-green-400 text-base"></i>
@@ -153,7 +153,7 @@
             <!-- Mobile Search Bar -->
             <div id="mobileSearch" class="hidden md:hidden pb-4">
                 <div class="relative">
-                    <input type="text" id="mobileSearchInput" onkeyup="filterProductsMobile()" placeholder="قرآن کریم، ترجمہ یا کتب تلاش کریں..." 
+                    <input type="text" id="mobileSearchInput" oninput="filterProductsMobile()" placeholder="قرآن کریم، ترجمہ یا کتب تلاش کریں..." 
                            class="w-full bg-emerald-900/80 border border-gold-600/40 rounded-full py-2 px-4 pr-10 text-sm text-amber-100 placeholder-emerald-300/60 focus:outline-none focus:ring-1 focus:ring-gold-500">
                     <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gold-400">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -570,18 +570,42 @@
         }
 
         function applyCategoryFilter(cat) {
-            if (cat === 'all') renderProducts(window.productsData);
-            else renderProducts((window.productsData || []).filter(p => p.category === cat));
+            const query = (document.getElementById('searchInput').value || document.getElementById('mobileSearchInput').value || '').toLowerCase().trim();
+            let items = window.productsData || [];
+            
+            if (cat !== 'all') {
+                items = items.filter(p => p.category === cat);
+            }
+            if (query) {
+                items = items.filter(p => p.title.toLowerCase().includes(query) || (p.desc && p.desc.toLowerCase().includes(query)));
+            }
+            renderProducts(items);
         }
 
         function filterProducts() {
             const q = document.getElementById('searchInput').value.toLowerCase().trim();
-            renderProducts((window.productsData || []).filter(p => p.title.toLowerCase().includes(q)));
+            let items = window.productsData || [];
+            
+            if (window.currentCategory !== 'all') {
+                items = items.filter(p => p.category === window.currentCategory);
+            }
+            if (q) {
+                items = items.filter(p => p.title.toLowerCase().includes(q) || (p.desc && p.desc.toLowerCase().includes(q)));
+            }
+            renderProducts(items);
         }
 
         function filterProductsMobile() {
             const q = document.getElementById('mobileSearchInput').value.toLowerCase().trim();
-            renderProducts((window.productsData || []).filter(p => p.title.toLowerCase().includes(q)));
+            let items = window.productsData || [];
+            
+            if (window.currentCategory !== 'all') {
+                items = items.filter(p => p.category === window.currentCategory);
+            }
+            if (q) {
+                items = items.filter(p => p.title.toLowerCase().includes(q) || (p.desc && p.desc.toLowerCase().includes(q)));
+            }
+            renderProducts(items);
         }
 
         function toggleMobileSearch() { document.getElementById('mobileSearch').classList.toggle('hidden'); }
@@ -663,12 +687,12 @@
                 document.getElementById('pImage').value = p.image;
                 document.getElementById('pDesc').value = p.desc || '';
             } else {
-                document.getElementById('editProductId').value = '';
-                document.getElementById('pTitle').value = '';
-                document.getElementById('pCategory').value = 'tajweedi';
-                document.getElementById('pPrice').value = '';
-                document.getElementById('pImage').value = '';
-                document.getElementById('pDesc').value = '';
+                document.getElementById('editProductId').value = '',
+                document.getElementById('pTitle').value = '',
+                document.getElementById('pCategory').value = 'tajweedi',
+                document.getElementById('pPrice').value = '',
+                document.getElementById('pImage').value = '',
+                document.getElementById('pDesc').value = ''
             }
         }
         function closeProductForm() { document.getElementById('productFormModal').classList.add('hidden'); }
@@ -699,7 +723,7 @@
         async function saveAccount(e) {
             e.preventDefault();
             const data = {
-                title: document.getElementById('accTitle').value,
+                title: document.getElementById('accTitle5') || document.getElementById('accTitle').value,
                 bank: document.getElementById('accBank').value,
                 number: document.getElementById('accNumber').value
             };
